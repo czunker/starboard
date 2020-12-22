@@ -1,0 +1,791 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Kubernetes-native security toolkit">
+      
+      
+      
+        <link rel="canonical" href="https://aquasecurity.github.io/starboard/operator/">
+      
+      
+      <link rel="shortcut icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.1.2, mkdocs-material-6.1.7">
+    
+    
+      
+        <title>Starboard Operator - Starboard</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.19753c6b.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.196e0c26.min.css">
+        
+      
+    
+    
+    
+      
+        
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto",-apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono",SFMono-Regular,Consolas,Menlo,monospace}</style>
+      
+    
+    
+    
+    
+      
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="" data-md-color-primary="none" data-md-color-accent="none">
+      
+  
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#starboard-operator" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid" aria-label="Header">
+    <a href="https://aquasecurity.github.io/starboard/" title="Starboard" class="md-header-nav__button md-logo" aria-label="Starboard">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    <label class="md-header-nav__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2z"/></svg>
+    </label>
+    <div class="md-header-nav__title" data-md-component="header-title">
+      
+        <div class="md-header-nav__ellipsis">
+          <span class="md-header-nav__topic md-ellipsis">
+            Starboard
+          </span>
+          <span class="md-header-nav__topic md-ellipsis">
+            
+              Starboard Operator
+            
+          </span>
+        </div>
+      
+    </div>
+    
+      <label class="md-header-nav__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+      </label>
+      
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" data-md-state="active" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0116 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 019.5 16 6.5 6.5 0 013 9.5 6.5 6.5 0 019.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+      </label>
+      <button type="reset" class="md-search__icon md-icon" aria-label="Clear" data-md-component="search-reset" tabindex="-1">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header-nav__source">
+        
+<a href="https://github.com/aquasecurity/starboard" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aquasecurity/starboard
+  </div>
+</a>
+      </div>
+    
+  </nav>
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="https://aquasecurity.github.io/starboard/" title="Starboard" class="md-nav__button md-logo" aria-label="Starboard">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 003-3 3 3 0 00-3-3 3 3 0 00-3 3 3 3 0 003 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54z"/></svg>
+
+    </a>
+    Starboard
+  </label>
+  
+    <div class="md-nav__source">
+      
+<a href="https://github.com/aquasecurity/starboard" title="Go to repository" class="md-source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M439.55 236.05L244 40.45a28.87 28.87 0 00-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 01-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 000 40.81l195.61 195.6a28.86 28.86 0 0040.8 0l194.69-194.69a28.86 28.86 0 000-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    aquasecurity/starboard
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." class="md-nav__link">
+      Introduction
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Starboard Operator
+        <span class="md-nav__icon md-icon"></span>
+      </label>
+    
+    <a href="./" class="md-nav__link md-nav__link--active">
+      Starboard Operator
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kubectl" class="md-nav__link">
+    kubectl
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#helm" class="md-nav__link">
+    Helm
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    Getting Started
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-modes" class="md-nav__link">
+    Install Modes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../configuration/" class="md-nav__link">
+      Configuration
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../integrations/" class="md-nav__link">
+      Integrations
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../crds/" class="md-nav__link">
+      Custom Resource Definitions
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../faq/" class="md-nav__link">
+      Frequently Asked Questions
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../troubleshooting/" class="md-nav__link">
+      Troubleshooting
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+    <nav class="md-nav" aria-label="Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#kubectl" class="md-nav__link">
+    kubectl
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#helm" class="md-nav__link">
+    Helm
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#getting-started" class="md-nav__link">
+    Getting Started
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#install-modes" class="md-nav__link">
+    Install Modes
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                <h1 id="starboard-operator">Starboard Operator</h1>
+<h2 id="overview">Overview</h2>
+<p>This operator automatically updates security report resources in response to
+workload and other changes on a Kubernetes cluster - for example, initiating
+a vulnerability scan when a new pod is started. In other words, the desired
+state for this operator is that for each workload there are security reports
+stored in the cluster as custom resources.</p>
+<p>Currently, the operator only supports vulnerabilityreports security resources
+as depicted below. However, we plan to support all custom security resources.</p>
+<p><img alt="" src="../images/operator/starboard-operator.png" /></p>
+<h2 id="installation">Installation</h2>
+<h3 id="kubectl">kubectl</h3>
+<p>You can install the operator with provided static YAML manifests with fixed
+values. However, this approach has its shortcomings. For example, if you want to
+change the container image or modify default configuration parameters, you have
+to create new manifests or edit existing ones.</p>
+<p>To deploy the operator in the <code>starboard-operator</code> namespace and configure it to
+watch the <code>default</code> namespace:</p>
+<ol>
+<li>
+<p>Send the definition of the <code>vulnerabilityreports</code> custom resource to the
+   Kubernetes API:</p>
+<pre><code>kubectl apply -f https://raw.githubusercontent.com/aquasecurity/starboard/main/deploy/crd/vulnerabilityreports.crd.yaml
+</code></pre>
+</li>
+<li>
+<p>Send the following Kubernetes objects definitions to the Kubernetes API:</p>
+<pre><code>kubectl apply -f https://raw.githubusercontent.com/aquasecurity/starboard/main/deploy/static/01-starboard-operator.ns.yaml \
+  -f https://raw.githubusercontent.com/aquasecurity/starboard/main/deploy/static/02-starboard-operator.sa.yaml \
+  -f https://raw.githubusercontent.com/aquasecurity/starboard/main/deploy/static/03-starboard-operator.clusterrole.yaml \
+  -f https://raw.githubusercontent.com/aquasecurity/starboard/main/deploy/static/04-starboard-operator.clusterrolebinding.yaml
+</code></pre>
+</li>
+<li>
+<p>(Optional) Configure the operator by creating the <code>starboard</code> ConfigMap and
+   the <code>starboard</code> secret in the <code>starboard-operator</code> namespace. If you skip
+   this step, the operator will ensure <a href="../configuration/">configuration objects</a>
+   on startup with the default settings.</p>
+<pre><code>kubectl apply -f https://raw.githubusercontent.com/aquasecurity/starboard/main/deploy/static/05-starboard-operator.config.yaml
+</code></pre>
+<p>Review the default values and makes sure the operator is configured properly:</p>
+<pre><code>kubectl describe cm starboard -n starboard-operator
+kubectl describe secret starboard -n starboard-operator
+</code></pre>
+</li>
+<li>
+<p>Finally, create the <code>starboard-operator</code> Deployment in the <code>starboard-operator</code>
+   namespace to start the operator's pod:</p>
+<pre><code>kubectl apply -f https://raw.githubusercontent.com/aquasecurity/starboard/main/deploy/static/06-starboard-operator.deployment.yaml
+</code></pre>
+</li>
+</ol>
+<p>To confirm that the operator is running, check the number of replicas created by
+the <code>starboard-operator</code> Deployment in the <code>starboard-operator</code> namespace:</p>
+<pre><code>kubectl get deployment -n starboard-operator
+</code></pre>
+<p>You should see the output similar to the following:</p>
+<pre><code>NAME                 READY   UP-TO-DATE   AVAILABLE   AGE
+starboard-operator   1/1     1            1           11m
+</code></pre>
+<p>If for some reason it's not ready yet, check the logs of the Deployment for
+errors:</p>
+<pre><code>kubectl logs -n starboard-operator deployment/starboard-operator
+</code></pre>
+<p>In case of any error consult our <a href="../troubleshooting/">Troubleshooting</a> guidelines.</p>
+<p>You can uninstall the operator with the following command:</p>
+<pre><code>kubectl delete -f https://raw.githubusercontent.com/aquasecurity/starboard/main/deploy/static/06-starboard-operator.deployment.yaml \
+  -f https://raw.githubusercontent.com/aquasecurity/starboard/main/deploy/static/05-starboard-operator.cm.yaml \
+  -f https://raw.githubusercontent.com/aquasecurity/starboard/main/deploy/static/04-starboard-operator.clusterrolebinding.yaml \
+  -f https://raw.githubusercontent.com/aquasecurity/starboard/main/deploy/static/03-starboard-operator.clusterrole.yaml \
+  -f https://raw.githubusercontent.com/aquasecurity/starboard/main/deploy/static/02-starboard-operator.sa.yaml \
+  -f https://raw.githubusercontent.com/aquasecurity/starboard/main/deploy/static/01-starboard-operator.ns.yaml
+</code></pre>
+<h3 id="helm">Helm</h3>
+<p><a href="https://helm.sh/">Helm</a>, which is de facto standard package manager for Kubernetes, allows
+installing applications from parameterized YAML manifests called Helm <a href="https://helm.sh/docs/topics/charts/">charts</a>.</p>
+<p>To address shortcomings of static YAML manifests we provide the Helm chart to
+deploy the Starboard operator. The Helm chart supports all <a href="#install-modes">install modes</a>.</p>
+<p>As an example, let's install the operator in the <code>starboard-operator</code> namespace and
+configure it to watch the <code>default</code> namespaces:</p>
+<ol>
+<li>
+<p>Clone the chart repository:</p>
+<pre><code>git clone https://github.com/aquasecurity/starboard.git
+cd starboard
+</code></pre>
+</li>
+<li>
+<p>(Optional) Configure the operator by creating the <code>starboard</code> ConfigMap and
+   the <code>starboard</code> secret in the <code>starboard-operator</code> namespace. If you skip
+   this step, the operator will ensure <a href="../configuration/">configuration objects</a>
+   on startup with the default settings.</p>
+<pre><code>kubectl apply -f https://raw.githubusercontent.com/aquasecurity/starboard/main/deploy/static/05-starboard-operator.config.yaml
+</code></pre>
+<p>Review the default values and makes sure the operator is configured properly:</p>
+<pre><code>kubectl describe cm starboard -n starboard-operator
+kubectl describe secret starboard -n starboard-operator
+</code></pre>
+</li>
+<li>
+<p>Install the chart:</p>
+<pre><code>helm install starboard-operator ./deploy/helm \
+  -n starboard-operator \
+  --create-namespace \
+  --set="targetNamespaces=default"
+</code></pre>
+</li>
+</ol>
+<p>Check that the <code>starboard-operator</code> Helm release is created in the <code>starboard-operator</code>
+namespace:</p>
+<pre><code>helm list -n starboard-operator
+</code></pre>
+<pre><code class="language-text">NAME                NAMESPACE           REVISION    UPDATED                                 STATUS      CHART                       APP VERSION
+starboard-operator  starboard-operator  1           2020-12-09 16:15:51.070673 +0100 CET    deployed    starboard-operator-0.2.1    0.7.1
+</code></pre>
+<p>To confirm that the operator is running, check the number of replicas created by
+the <code>starboard-operator</code> Deployment in the <code>starboard-operator</code> namespace:</p>
+<pre><code>kubectl get deployment -n starboard-operator
+</code></pre>
+<p>You should see the output similar to the following:</p>
+<pre><code>NAME                 READY   UP-TO-DATE   AVAILABLE   AGE
+starboard-operator   1/1     1            1           11m
+</code></pre>
+<p>If for some reason it's not ready yet, check the logs of the Deployment for
+errors:</p>
+<pre><code>kubectl logs -n starboard-operator deployment/starboard-operator
+</code></pre>
+<p>In case of any error consult our <a href="../troubleshooting/">Troubleshooting</a> guidelines.</p>
+<p>You can uninstall the operator with the following command:</p>
+<pre><code>helm uninstall starboard-operator -n starboard-operator
+</code></pre>
+<blockquote>
+<p><strong>NOTE</strong> You have to manually delete CRDs created by the <code>helm install</code> command:</p>
+<pre><code>kubectl delete crd vulnerabilityreports.aquasecurity.github.io
+</code></pre>
+</blockquote>
+<h2 id="getting-started">Getting Started</h2>
+<p>Assuming that you installed the operator in the <code>starboard-operator</code> namespace,
+and it's configured to discover Kubernetes workloads in the <code>default</code> namespace,
+let's create the <code>nginx</code> Deployment that we know is vulnerable:</p>
+<pre><code>kubectl create deployment nginx --image nginx:1.16
+</code></pre>
+<p>When the first pod controlled by the <code>nginx</code> Deployment is created, the operator
+immediately detects that and creates the Kubernetes job in the
+<code>starboard-operator</code> namespace to scan the <code>nignx</code> container's image (<code>nginx:1.16</code>)
+for vulnerabilities.</p>
+<pre><code>kubectl get job -n starboard-operator
+</code></pre>
+<p>In our case you should see only one job with a random name scheduled to scan
+the <code>nginx</code> Deployment:</p>
+<pre><code>NAME                                   COMPLETIONS   DURATION   AGE
+69516243-c782-4445-88b4-689ffbb3cdb7   0/1           68s        68s
+</code></pre>
+<p>If everything goes fine, the scan job is deleted, and the operator creates the
+<code>vulnerabilityreports</code> resource in the <code>default</code> namespace that corresponds to
+the <code>nginx</code> container:</p>
+<pre><code>kubectl get vulnerabilityreports -o wide
+</code></pre>
+<p>Notice that the <code>vulnerabilityreports</code> instance is associated with the active
+ReplicaSet of the <code>nginx</code> Deployment by name, and the set of labels.</p>
+<pre><code>NAME                                REPOSITORY      TAG    SCANNER   AGE   CRITICAL   HIGH   MEDIUM   LOW   UNKNOWN
+replicaset-nginx-6d4cf56db6-nginx   library/nginx   1.16   Trivy     14m   1          35     16       85    2
+</code></pre>
+<p>You can get and describe <code>vulnerabilityreports</code> as any other built-in Kubernetes
+object. For example, you can display the report as JSON object:</p>
+<pre><code>kubectl get vulnerabilityreports replicaset-nginx-6d4cf56db6-nginx -o json
+</code></pre>
+<h2 id="configuration">Configuration</h2>
+<p>Configuration of the operator's pod is done via environment variables at startup.</p>
+<table>
+<thead>
+<tr>
+<th>NAME</th>
+<th>DEFAULT</th>
+<th>DESCRIPTION</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OPERATOR_NAMESPACE</code></td>
+<td>N/A</td>
+<td>See <a href="#install-modes">Install modes</a></td>
+</tr>
+<tr>
+<td><code>OPERATOR_TARGET_NAMESPACES</code></td>
+<td>N/A</td>
+<td>See <a href="#install-modes">Install modes</a></td>
+</tr>
+<tr>
+<td><code>OPERATOR_LOG_DEV_MODE</code></td>
+<td><code>false</code></td>
+<td>The flag to use (or not use) development mode (more human-readable output, extra stack traces and logging information, etc).</td>
+</tr>
+<tr>
+<td><code>OPERATOR_SCAN_JOB_TIMEOUT</code></td>
+<td><code>5m</code></td>
+<td>The length of time to wait before giving up on a scan job</td>
+</tr>
+<tr>
+<td><code>OPERATOR_METRICS_BIND_ADDRESS</code></td>
+<td><code>:8080</code></td>
+<td>The TCP address to bind to for serving <a href="https://github.com/prometheus">Prometheus</a> metrics. It can be set to <code>0</code> to disable the metrics serving.</td>
+</tr>
+<tr>
+<td><code>OPERATOR_HEALTH_PROBE_BIND_ADDRESS</code></td>
+<td><code>:9090</code></td>
+<td>The TCP address to bind to for serving health probes, i.e. <code>/healthz/</code> and <code>/readyz/</code> endpoints.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="install-modes">Install Modes</h3>
+<p>The values of the <code>OPERATOR_NAMESPACE</code> and <code>OPERATOR_TARGET_NAMESPACES</code> determine
+the install mode, which in turn determines the multitenancy support of the operator.</p>
+<table>
+<thead>
+<tr>
+<th>MODE</th>
+<th>OPERATOR_NAMESPACE</th>
+<th>OPERATOR_TARGET_NAMESPACES</th>
+<th>DESCRIPTION</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OwnNamespace</td>
+<td><code>operators</code></td>
+<td><code>operators</code></td>
+<td>The operator can be configured to watch events in the namespace it is deployed in.</td>
+</tr>
+<tr>
+<td>SingleNamespace</td>
+<td><code>operators</code></td>
+<td><code>foo</code></td>
+<td>The operator can be configured to watch for events in a single namespace that the operator is not deployed in.</td>
+</tr>
+<tr>
+<td>MultiNamespace</td>
+<td><code>operators</code></td>
+<td><code>foo,bar,baz</code></td>
+<td>The operator can be configured to watch for events in more than one namespace.</td>
+</tr>
+<tr>
+<td>AllNamespaces</td>
+<td><code>operators</code></td>
+<td>(blank string)</td>
+<td>The operator can be configured to watch for events in all namespaces.</td>
+</tr>
+</tbody>
+</table>
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid" aria-label="Footer">
+        
+          <a href=".." class="md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12z"/></svg>
+            </div>
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Introduction
+              </div>
+            </div>
+          </a>
+        
+        
+          <a href="../configuration/" class="md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-footer-nav__title">
+              <div class="md-ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Configuration
+              </div>
+            </div>
+            <div class="md-footer-nav__button md-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        Made with
+        <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+          Material for MkDocs
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/vendor.0ac82a11.min.js"></script>
+      <script src="../assets/javascripts/bundle.f81dfb4d.min.js"></script><script id="__lang" type="application/json">{"clipboard.copy": "Copy to clipboard", "clipboard.copied": "Copied to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.placeholder": "Type to start searching", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.term.missing": "Missing"}</script>
+      
+      <script>
+        app = initialize({
+          base: "..",
+          features: [],
+          search: Object.assign({
+            worker: "../assets/javascripts/worker/search.4ac00218.min.js"
+          }, typeof search !== "undefined" && search)
+        })
+      </script>
+      
+    
+  </body>
+</html>
